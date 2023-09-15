@@ -11,6 +11,7 @@ import com.alura.domain.model.User;
 import com.alura.domain.model.course.Course;
 import com.alura.domain.model.topic.Topic;
 import com.alura.domain.service.ITopicService;
+import com.alura.infra.error.ErrorMessages;
 import com.alura.infra.error.validations.ValidationError;
 
 @Service
@@ -30,16 +31,12 @@ public class TopicService implements ITopicService {
 
 	@Override
 	public void create(TopicDto data) {
-		User user = userRepository.findById(data.userId())
-				.orElseThrow(() -> new ValidationError("The user does not exist in the database"));
-
-		Course course = courseRepository.findById(data.courseId())
-				.orElseThrow(() -> new ValidationError("The course does not exist in the database"));
-
+		User user = getUser(data);
+		Course course = getCourse(data);
 		Boolean topicExists = topicRepository.existsByTitleAndMessage(data.title(), data.message());
 
 		if (Boolean.TRUE.equals(topicExists)) {
-			throw new ValidationError("The topic already exists in the database");
+			throw new ValidationError(ErrorMessages.TOPIC_EXISTS.getMessage());
 		}
 
 		Topic topic = data.toTopic(user, course);
@@ -48,20 +45,31 @@ public class TopicService implements ITopicService {
 
 	@Override
 	public void updateTopic(Long id, TopicDto data) {
-		User user = null;
-		Course course = null;
+		User user = getUser(data);
+		Course course = getCourse(data);
 
-		if (data.userId() != null) {
-			user = userRepository.findById(data.userId()).orElseThrow(() -> new ValidationError("User was not found"));
-		}
-		if (data.courseId() != null) {
-			course = courseRepository.findById(data.courseId())
-					.orElseThrow(() -> new ValidationError("User was not found"));
-		}
-
-		Topic topic = topicRepository.findById(id).orElseThrow(() -> new ValidationError("The topic was not found"));
+		Topic topic = topicRepository.findById(id)
+				.orElseThrow(() -> new ValidationError(ErrorMessages.TOPIC_EXISTS.getMessage()));
 
 		topic.updateData(data, course, user);
+	}
+
+	private Course getCourse(TopicDto data) {
+		Course course = null;
+		if (data.courseId() != null) {
+			course = courseRepository.findById(data.courseId())
+					.orElseThrow(() -> new ValidationError(ErrorMessages.COURSE_NOT_FOUND.getMessage()));
+		}
+		return course;
+	}
+
+	private User getUser(TopicDto data) {
+		User user = null;
+		if (data.userId() != null) {
+			user = userRepository.findById(data.userId())
+					.orElseThrow(() -> new ValidationError(ErrorMessages.USER_NOT_FOUND.getMessage()));
+		}
+		return user;
 	}
 
 	@Override
