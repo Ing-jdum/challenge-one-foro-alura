@@ -3,6 +3,9 @@ package com.alura.data.remote.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,10 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alura.data.remote.dto.TopicDto;
-import com.alura.data.remote.dto.UpdateTopicDto;
 import com.alura.data.repository.TopicRepository;
-import com.alura.domain.model.service.ITopicService;
-import com.alura.domain.service.TopicService;
+import com.alura.domain.service.ITopicService;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -42,18 +43,18 @@ public class TopicController {
 	}
 
 	@GetMapping("/all")
-	public ResponseEntity<List<TopicDto>> getAll() {
-		return ResponseEntity.ok(topicService.getAll());
+	public ResponseEntity<Page<TopicDto>> getAll(@PageableDefault(size = 2) Pageable pagination) {
+		return ResponseEntity.ok(topicRepository.findAll(pagination).map(TopicDto::new));
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<TopicDto> getById(@PathVariable Long id) {
-		return ResponseEntity.ok(topicService.getById(id));
+		return ResponseEntity.ok(topicService.findById(id));
 	}
 
 	@PutMapping("/{id}")
 	@Transactional
-	public ResponseEntity<String> updateById(@PathVariable Long id, @RequestBody @Valid UpdateTopicDto data) {
+	public ResponseEntity<String> updateById(@PathVariable Long id, @RequestBody TopicDto data) {
 		topicService.updateTopic(id, data);
 		return ResponseEntity.ok("Item updated");
 	}
