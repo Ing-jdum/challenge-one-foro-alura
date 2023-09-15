@@ -1,4 +1,4 @@
-package com.alura.domain.course;
+package com.alura.domain.model.course;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

@@ -1,4 +1,4 @@
-package com.alura.controller;
+package com.alura.data.remote.controller;
 
 import java.util.List;
 
@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alura.ITopicService;
-import com.alura.domain.topic.TopicDto;
-import com.alura.domain.topic.TopicRepository;
-import com.alura.domain.topic.UpdateTopicDto;
-import com.alura.domain.topic.service.TopicService;
+import com.alura.data.remote.dto.TopicDto;
+import com.alura.data.remote.dto.UpdateTopicDto;
+import com.alura.data.repository.TopicRepository;
+import com.alura.domain.model.service.ITopicService;
+import com.alura.domain.service.TopicService;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;

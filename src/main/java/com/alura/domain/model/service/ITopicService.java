@@ -1,9 +1,10 @@
-package com.alura;
+package com.alura.domain.model.service;
 
-import com.alura.domain.topic.TopicDto;
-import com.alura.domain.topic.UpdateTopicDto;
 import jakarta.validation.Valid;
 import java.util.List;
+
+import com.alura.data.remote.dto.TopicDto;
+import com.alura.data.remote.dto.UpdateTopicDto;
 
 public interface ITopicService {
 

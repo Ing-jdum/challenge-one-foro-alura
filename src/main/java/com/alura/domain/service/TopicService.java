@@ -1,23 +1,20 @@
-package com.alura.domain.topic.service;
+package com.alura.domain.service;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.alura.ITopicService;
-import com.alura.domain.course.Course;
-import com.alura.domain.course.CourseRepository;
-import com.alura.domain.topic.Topic;
-import com.alura.domain.topic.TopicDto;
-import com.alura.domain.topic.TopicRepository;
-import com.alura.domain.topic.UpdateTopicDto;
-import com.alura.domain.user.User;
-import com.alura.domain.user.UserRepository;
-import com.alura.infra.error.CourseNotFoundException;
-import com.alura.infra.error.TopicExistsException;
-import com.alura.infra.error.TopicNotFoundException;
-import com.alura.infra.error.UserNotFoundException;
+import com.alura.data.remote.dto.TopicDto;
+import com.alura.data.remote.dto.UpdateTopicDto;
+import com.alura.data.repository.CourseRepository;
+import com.alura.data.repository.TopicRepository;
+import com.alura.data.repository.UserRepository;
+import com.alura.domain.model.User;
+import com.alura.domain.model.course.Course;
+import com.alura.domain.model.service.ITopicService;
+import com.alura.domain.model.topic.Topic;
+import com.alura.infra.error.validations.ValidationError;
 
 import jakarta.validation.Valid;
 
@@ -38,15 +35,15 @@ public class TopicService implements ITopicService {
 
 	public void create(TopicDto data) {
 		User user = userRepository.findById(data.userId())
-				.orElseThrow(() -> new UserNotFoundException("The user does not exist in the database"));
+				.orElseThrow(() -> new ValidationError("The user does not exist in the database"));
 
 		Course course = courseRepository.findById(data.courseId())
-				.orElseThrow(() -> new CourseNotFoundException("The course does not exist in the database"));
+				.orElseThrow(() -> new ValidationError("The course does not exist in the database"));
 
 		Boolean topicExists = topicRepository.existsByTitleAndMessage(data.title(), data.message());
 
 		if (Boolean.TRUE.equals(topicExists)) {
-			throw new TopicExistsException("The topic already exists in the database");
+			throw new ValidationError("The topic already exists in the database");
 		}
 
 		Topic topic = data.toTopic(user, course);
@@ -59,15 +56,15 @@ public class TopicService implements ITopicService {
 
 		if (data.userId() != null) {
 			user = userRepository.findById(data.userId())
-					.orElseThrow(() -> new UserNotFoundException("User was not found"));
+					.orElseThrow(() -> new ValidationError("User was not found"));
 		}
 		if (data.courseId() != null) {
 			course = courseRepository.findById(data.courseId())
-					.orElseThrow(() -> new CourseNotFoundException("User was not found"));
+					.orElseThrow(() -> new ValidationError("User was not found"));
 		}
 
 		Topic topic = topicRepository.findById(id)
-				.orElseThrow(() -> new TopicNotFoundException("The topic was not found"));
+				.orElseThrow(() -> new ValidationError("The topic was not found"));
 
 		topic.updateData(data, course, user);
 	}
@@ -78,7 +75,7 @@ public class TopicService implements ITopicService {
 
 	public TopicDto getById(Long id) {
 		Topic topic = topicRepository.findById(id)
-				.orElseThrow(() -> new TopicNotFoundException("The topic with the specified id was not found"));
+				.orElseThrow(() -> new ValidationError("The topic with the specified id was not found"));
 		return TopicDto.fromTopic(topic);
 	}
 }

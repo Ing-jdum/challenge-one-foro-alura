@@ -1,7 +1,9 @@
-package com.alura.domain.topic;
+package com.alura.data.remote.dto;
 
-import com.alura.domain.course.Course;
-import com.alura.domain.user.User;
+import com.alura.domain.model.User;
+import com.alura.domain.model.course.Course;
+import com.alura.domain.model.topic.Topic;
+import com.alura.domain.model.topic.TopicStatus;
 
 import jakarta.validation.constraints.NotNull;
 

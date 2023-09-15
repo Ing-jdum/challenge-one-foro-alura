@@ -1,12 +1,13 @@
-package com.alura.domain.topic;
+package com.alura.domain.model.topic;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.alura.domain.course.Course;
-import com.alura.domain.response.Response;
-import com.alura.domain.user.User;
+import com.alura.data.remote.dto.UpdateTopicDto;
+import com.alura.domain.model.Response;
+import com.alura.domain.model.User;
+import com.alura.domain.model.course.Course;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

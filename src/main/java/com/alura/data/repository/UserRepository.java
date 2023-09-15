@@ -1,7 +1,9 @@
-package com.alura.domain.user;
+package com.alura.data.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import com.alura.domain.model.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {

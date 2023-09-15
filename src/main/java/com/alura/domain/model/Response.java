@@ -1,9 +1,8 @@
-package com.alura.domain.response;
+package com.alura.domain.model;
 
 import java.time.LocalDateTime;
 
-import com.alura.domain.topic.Topic;
-import com.alura.domain.user.User;
+import com.alura.domain.model.topic.Topic;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
