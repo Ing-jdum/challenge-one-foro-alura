@@ -13,14 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alura.domain.topic.Topic;
+import com.alura.ITopicService;
 import com.alura.domain.topic.TopicDto;
 import com.alura.domain.topic.TopicRepository;
 import com.alura.domain.topic.UpdateTopicDto;
-import com.alura.domain.topic.service.CreateTopicService;
-import com.alura.domain.topic.service.GetTopicService;
-import com.alura.domain.topic.service.UpdateTopicService;
-import com.alura.infra.error.TopicNotFoundException;
+import com.alura.domain.topic.service.TopicService;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -29,40 +26,35 @@ import jakarta.validation.Valid;
 @RequestMapping("/topics")
 public class TopicController {
 
-	CreateTopicService createTopicService;
-	GetTopicService getTopicService;
-	UpdateTopicService updateTopicService;
+	ITopicService topicService;
 	TopicRepository topicRepository;
 
 	@Autowired
-	public TopicController(CreateTopicService createTopicService, GetTopicService getTopicService,
-			TopicRepository topicRepository, UpdateTopicService updateTopicService) {
-		this.createTopicService = createTopicService;
-		this.getTopicService = getTopicService;
+	public TopicController(ITopicService topicService, TopicRepository topicRepository) {
+		this.topicService = topicService;
 		this.topicRepository = topicRepository;
-		this.updateTopicService  = updateTopicService;
 	}
 
 	@PostMapping
 	public ResponseEntity<TopicDto> create(@RequestBody @Valid TopicDto data) {
-		createTopicService.create(data);
+		topicService.create(data);
 		return ResponseEntity.ok(data);
 	}
 
 	@GetMapping("/all")
 	public ResponseEntity<List<TopicDto>> getAll() {
-		return ResponseEntity.ok(getTopicService.getAll());
+		return ResponseEntity.ok(topicService.getAll());
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<TopicDto> getById(@PathVariable Long id) {
-		return ResponseEntity.ok(getTopicService.getById(id));
+		return ResponseEntity.ok(topicService.getById(id));
 	}
 
 	@PutMapping("/{id}")
 	@Transactional
 	public ResponseEntity<String> updateById(@PathVariable Long id, @RequestBody @Valid UpdateTopicDto data) {
-		updateTopicService.updateTopic(id, data);
+		topicService.updateTopic(id, data);
 		return ResponseEntity.ok("Item updated");
 	}
 

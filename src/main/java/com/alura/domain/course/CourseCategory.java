@@ -21,7 +21,9 @@ public class CourseCategory {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@SuppressWarnings("unused")
 	private String category;
+	@SuppressWarnings("unused")
 	private String description;
 
 }
