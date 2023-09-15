@@ -1,4 +1,4 @@
-package com.alura.domain;
+package com.alura.domain.course;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -22,7 +22,9 @@ public class Course {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "course_category_id")
 	private CourseCategory categoria;
-
+	
+	public Course() {}
+	
 	public Course(String name, CourseCategory categoria) {
 		this.name = name;
 		this.categoria = categoria;

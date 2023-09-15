@@ -4,9 +4,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.alura.domain.Course;
-import com.alura.domain.Response;
-import com.alura.domain.User;
+import com.alura.domain.course.Course;
+import com.alura.domain.response.Response;
+import com.alura.domain.user.User;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -19,6 +19,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
 
 @Table(name = "topics")
 @Entity(name = "Topic")
@@ -45,6 +46,8 @@ public class Topic {
 
 	@OneToMany(mappedBy = "topic")
 	private List<Response> responses = new ArrayList<>();
+	
+	public Topic() {}
 
 	public Topic(String title, String message, Course course) {
 		this.title = title;
@@ -105,8 +108,8 @@ public class Topic {
 		return creationDate;
 	}
 
-	public void setCreationDate(LocalDateTime creationDate) {
-		this.creationDate = creationDate;
+	public void setCreationDate() {
+		this.creationDate = LocalDateTime.now();
 	}
 
 	public TopicStatus getStatus() {
@@ -140,4 +143,23 @@ public class Topic {
 	public void setResponses(List<Response> responses) {
 		this.responses = responses;
 	}
+
+	public void updateData(@Valid UpdateTopicDto data, Course course, User user) {
+		  if (data.title() != null) {
+              this.title = data.title();
+          }
+          if (data.message() != null) {
+              this.message = data.message();
+          }
+          if (data.status() != null) {
+              this.status = data.status();
+          }
+          if (data.userId() != null) {
+              this.author = user;
+          }
+          if (data.courseId() != null) {
+              this.course = course;
+          }
+	}
+	
 }

@@ -1,4 +1,4 @@
-package com.alura.domain;
+package com.alura.domain.user;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

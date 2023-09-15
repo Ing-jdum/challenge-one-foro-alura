@@ -1,4 +1,4 @@
-package com.alura.domain;
+package com.alura.domain.course;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
