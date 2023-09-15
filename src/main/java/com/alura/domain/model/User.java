@@ -1,10 +1,13 @@
 package com.alura.domain.model;
 
+import com.alura.data.remote.dto.UserDto;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 
 @Table(name = "users")
 @Entity(name = "User")
@@ -17,7 +20,13 @@ public class User {
     private String email;
     private String password;
 
-    @Override
+    public User(UserDto userDto) {
+		this.name = userDto.name();
+		this.email = userDto.email();
+		this.password = userDto.password();
+	}
+
+	@Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
@@ -73,4 +82,16 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+	public void updateData(UserDto data) {
+		if (data.name() != null) {
+			this.name = data.name();
+		}
+		if (data.email() != null) {
+			this.email = data.email();
+		}
+		if (data.password() != null) {
+			this.password = data.password();
+		}
+	}
 }

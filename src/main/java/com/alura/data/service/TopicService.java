@@ -75,7 +75,7 @@ public class TopicService implements ITopicService {
 	@Override
 	public TopicDto findById(Long id) {
 		Topic topic = topicRepository.findById(id)
-				.orElseThrow(() -> new ValidationError("The topic with the specified id was not found"));
+				.orElseThrow(() -> new ValidationError(ErrorMessages.TOPIC_NOT_FOUND.getMessage()));
 		return new TopicDto(topic);
 	}
 }
