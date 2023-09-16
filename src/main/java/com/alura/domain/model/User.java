@@ -20,6 +20,8 @@ public class User {
     private String email;
     private String password;
 
+    public User() {}
+    
     public User(UserDto userDto) {
 		this.name = userDto.name();
 		this.email = userDto.email();

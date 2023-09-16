@@ -49,7 +49,7 @@ public class TopicService implements ITopicService {
 		Course course = getCourse(data);
 
 		Topic topic = topicRepository.findById(id)
-				.orElseThrow(() -> new ValidationError(ErrorMessages.TOPIC_EXISTS.getMessage()));
+				.orElseThrow(() -> new ValidationError(ErrorMessages.TOPIC_NOT_FOUND.getMessage()));
 
 		topic.updateData(data, course, user);
 	}
