@@ -33,14 +33,16 @@ public class TopicService implements ITopicService {
 	public void create(TopicDto data) {
 		User user = getUser(data);
 		Course course = getCourse(data);
-		Boolean topicExists = topicRepository.existsByTitleAndMessage(data.title(), data.message());
-
-		if (Boolean.TRUE.equals(topicExists)) {
-			throw new ValidationError(ErrorMessages.TOPIC_EXISTS.getMessage());
-		}
+		validateTopicExists(data);
 
 		Topic topic = data.toTopic(user, course);
 		topicRepository.save(topic);
+	}
+
+	private void validateTopicExists(TopicDto data) {
+		if (topicRepository.existsByTitleAndMessage(data.title(), data.message())) {
+			throw new ValidationError(ErrorMessages.TOPIC_EXISTS.getMessage());
+		}
 	}
 
 	@Override
@@ -50,8 +52,8 @@ public class TopicService implements ITopicService {
 
 		Topic topic = topicRepository.findById(id)
 				.orElseThrow(() -> new ValidationError(ErrorMessages.TOPIC_NOT_FOUND.getMessage()));
-
 		topic.updateData(data, course, user);
+		validateTopicExists(new TopicDto(topic));
 	}
 
 	private Course getCourse(TopicDto data) {

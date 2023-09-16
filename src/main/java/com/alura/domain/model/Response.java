@@ -2,6 +2,7 @@ package com.alura.domain.model;
 
 import java.time.LocalDateTime;
 
+import com.alura.data.remote.dto.ResponseDto;
 import com.alura.domain.model.topic.Topic;
 
 import jakarta.persistence.Entity;
@@ -34,6 +35,14 @@ public class Response {
 	private User author;
 
 	private Boolean solution = false;
+
+	public Response(ResponseDto responseDto, Topic topic, User user) {
+		this.message = responseDto.message();
+		this.topic = topic;
+		this.creationDate = responseDto.creationDate();
+		this.author = user;
+		this.solution = responseDto.solution();
+	}
 
 	@Override
 	public int hashCode() {
@@ -106,5 +115,27 @@ public class Response {
 
 	public void setSolution(Boolean solution) {
 		this.solution = solution;
+	}
+
+	public void update(ResponseDto data, Topic topic, User user) {
+		if(data.message() != null) {
+			this.message = data.message();
+		}
+		if(data.topicId() != null) {
+			this.topic = topic;
+		}
+		if(data.creationDate() != null) {
+			this.creationDate = data.creationDate();
+		}
+		if(data.userId() != null) {
+			this.author = user;
+		}
+		if(data.message() != null) {
+			this.message = data.message();
+		}
+		if(data.solution() != null) {
+			this.solution = data.solution();
+		}
+		
 	}
 }
