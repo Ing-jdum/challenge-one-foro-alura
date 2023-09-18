@@ -21,18 +21,19 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public void create(UserDto data) {
-		
+	public UserDto create(UserDto data) {
+
 		if (Boolean.TRUE.equals(userRepository.existsByName(data.name()))) {
 			throw new ValidationError(ErrorMessages.USER_EXISTS.getMessage());
 		}
-		
+
 		if (Boolean.TRUE.equals(userRepository.existsByEmail(data.email()))) {
 			throw new ValidationError(ErrorMessages.EMAIL_EXISTS.getMessage());
 		}
 
 		User user = data.toUser();
 		userRepository.save(user);
+		return new UserDto(user);
 	}
 
 	@Override
@@ -43,18 +44,18 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public void updateService(Long id, UserDto data) {
+	public UserDto updateService(Long id, UserDto data) {
 		User user = userRepository.findById(id)
 				.orElseThrow(() -> new ValidationError(ErrorMessages.USER_NOT_FOUND.getMessage()));
-		
+
 		if (Boolean.TRUE.equals(userRepository.existsByName(data.name()))) {
 			throw new ValidationError(ErrorMessages.USER_EXISTS.getMessage());
 		}
-		
+
 		if (Boolean.TRUE.equals(userRepository.existsByEmail(data.email()))) {
 			throw new ValidationError(ErrorMessages.EMAIL_EXISTS.getMessage());
 		}
-		
 		user.updateData(data);
+		return new UserDto(user);
 	}
 }

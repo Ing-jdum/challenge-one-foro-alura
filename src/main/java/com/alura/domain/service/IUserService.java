@@ -4,9 +4,9 @@ import com.alura.data.remote.dto.user.UserDto;
 
 public interface IUserService {
 
-	void create(UserDto data);
+	UserDto create(UserDto data);
 
 	UserDto findById(Long id);
 
-	void updateService(Long id, UserDto data);
+	UserDto updateService(Long id, UserDto data);
 }

@@ -1,5 +1,7 @@
 package com.alura.data.remote.controller;
 
+import java.net.URI;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.alura.data.remote.dto.ResponseDto;
 import com.alura.data.repository.ResponseRepository;
@@ -24,20 +27,22 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/responses")
 public class ResponseController {
-	
+
 	IResponseService responseService;
 	ResponseRepository responseRepository;
-	
+
 	@Autowired
 	public ResponseController(IResponseService responseService, ResponseRepository responseRepository) {
 		this.responseRepository = responseRepository;
 		this.responseService = responseService;
 	}
-	
+
 	@PostMapping
-	public ResponseEntity<ResponseDto> create(@RequestBody @Valid ResponseDto data) {
-		responseService.create(data);
-		return ResponseEntity.ok(data);
+	public ResponseEntity<ResponseDto> create(@RequestBody @Valid ResponseDto data,
+			UriComponentsBuilder uriComponentsBuilder) {
+		ResponseDto responseDto = responseService.create(data);
+		URI url = uriComponentsBuilder.path("/response/{id}").buildAndExpand(data.id()).toUri();
+		return ResponseEntity.created(url).body(responseDto);
 	}
 
 	@GetMapping("/all")
@@ -52,15 +57,14 @@ public class ResponseController {
 
 	@PutMapping("/{id}")
 	@Transactional
-	public ResponseEntity<String> updateById(@PathVariable Long id, @RequestBody ResponseDto data) {
-		responseService.updateService(id, data);
-		return ResponseEntity.ok("Item updated");
+	public ResponseEntity<ResponseDto> updateById(@PathVariable Long id, @RequestBody ResponseDto data) {
+		return ResponseEntity.ok(responseService.updateService(id, data));
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deleteById(@PathVariable Long id) {
 		responseRepository.deleteById(id);
-		return ResponseEntity.ok("Item deleted");
+		return ResponseEntity.noContent().build();
 	}
 
 }

@@ -10,11 +10,11 @@ import com.alura.domain.model.topic.TopicStatus;
 
 import jakarta.validation.constraints.NotNull;
 
-public record TopicDto(@NotNull String title, @NotNull String message, @NotNull TopicStatus status,
+public record TopicDto(Long id, @NotNull String title, @NotNull String message, @NotNull TopicStatus status,
 		@NotNull Long userId, @NotNull Long courseId, List<Long> responsesId) {
 	
 	public TopicDto(Topic topic) {
-        this(topic.getTitle(), 
+        this(topic.getId(), topic.getTitle(), 
 				topic.getMessage(), 
 				topic.getStatus(), 
 				topic.getAuthor().getId(), 

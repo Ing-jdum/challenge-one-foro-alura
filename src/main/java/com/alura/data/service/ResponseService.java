@@ -30,12 +30,13 @@ public class ResponseService implements IResponseService {
 	}
 
 	@Override
-	public void create(ResponseDto data) {
+	public ResponseDto create(ResponseDto data) {
 		validateResponseExists(data);
 		Topic topic = getTopic(data);
 		User user = getUser(data);
 		Response response = data.toResponse(topic, user);
 		responseRepository.save(response);
+		return new ResponseDto(response);
 	}
 
 	private void validateResponseExists(ResponseDto data) {
@@ -52,13 +53,15 @@ public class ResponseService implements IResponseService {
 	}
 
 	@Override
-	public void updateService(Long id, ResponseDto data) {
+	public ResponseDto updateService(Long id, ResponseDto data) {
 		Response response = responseRepository.findById(id)
 				.orElseThrow(() -> new ValidationError(ErrorMessages.RESPONSE_NOT_FOUND.getMessage()));
 		Topic topic = getTopic(data);
 		User user = getUser(data);
 		response.update(data, topic, user);
-		validateResponseExists(new ResponseDto(response));
+		ResponseDto newResponse = new ResponseDto(response); 
+		validateResponseExists(newResponse);
+		return newResponse;
 	}
 	
 	private User getUser(ResponseDto data) {

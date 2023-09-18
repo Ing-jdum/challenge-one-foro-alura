@@ -1,5 +1,7 @@
 package com.alura.data.remote.controller;
 
+import java.net.URI;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.alura.data.remote.dto.TopicDto;
 import com.alura.data.repository.TopicRepository;
@@ -35,9 +38,11 @@ public class TopicController {
 	}
 
 	@PostMapping
-	public ResponseEntity<TopicDto> create(@RequestBody @Valid TopicDto data) {
-		topicService.create(data);
-		return ResponseEntity.ok(data);
+	public ResponseEntity<TopicDto> create(@RequestBody @Valid TopicDto data,
+			UriComponentsBuilder uriComponentsBuilder) {
+		TopicDto topic = topicService.create(data);
+		URI url = uriComponentsBuilder.path("/topic/{id}").buildAndExpand(data.id()).toUri();
+		return ResponseEntity.created(url).body(topic);
 	}
 
 	@GetMapping("/all")
@@ -52,14 +57,13 @@ public class TopicController {
 
 	@PutMapping("/{id}")
 	@Transactional
-	public ResponseEntity<String> updateById(@PathVariable Long id, @RequestBody TopicDto data) {
-		topicService.updateTopic(id, data);
-		return ResponseEntity.ok("Item updated");
+	public ResponseEntity<TopicDto> updateById(@PathVariable Long id, @RequestBody TopicDto data) {
+		return ResponseEntity.ok(topicService.updateTopic(id, data));
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deleteById(@PathVariable Long id) {
 		topicRepository.deleteById(id);
-		return ResponseEntity.ok("Item deleted");
+		return ResponseEntity.noContent().build();
 	}
 }

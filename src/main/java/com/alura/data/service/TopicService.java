@@ -30,13 +30,14 @@ public class TopicService implements ITopicService {
 	}
 
 	@Override
-	public void create(TopicDto data) {
+	public TopicDto create(TopicDto data) {
 		User user = getUser(data);
 		Course course = getCourse(data);
 		validateTopicExists(data);
 
 		Topic topic = data.toTopic(user, course);
 		topicRepository.save(topic);
+		return(new TopicDto(topic));
 	}
 
 	private void validateTopicExists(TopicDto data) {
@@ -46,14 +47,16 @@ public class TopicService implements ITopicService {
 	}
 
 	@Override
-	public void updateTopic(Long id, TopicDto data) {
+	public TopicDto updateTopic(Long id, TopicDto data) {
 		User user = getUser(data);
 		Course course = getCourse(data);
 
 		Topic topic = topicRepository.findById(id)
 				.orElseThrow(() -> new ValidationError(ErrorMessages.TOPIC_NOT_FOUND.getMessage()));
 		topic.updateData(data, course, user);
-		validateTopicExists(new TopicDto(topic));
+		TopicDto newTopic = new TopicDto(topic);
+		validateTopicExists(newTopic);
+		return newTopic;
 	}
 
 	private Course getCourse(TopicDto data) {
