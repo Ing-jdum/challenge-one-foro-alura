@@ -1,4 +1,4 @@
-package com.alura.data.remote.dto;
+package com.alura.data.remote.dto.user;
 
 import com.alura.domain.model.User;
 

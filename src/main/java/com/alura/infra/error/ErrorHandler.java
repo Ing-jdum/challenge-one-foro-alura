@@ -8,6 +8,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.alura.infra.error.validations.ValidationError;
+
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ValidationException;
 
@@ -27,6 +29,11 @@ public class ErrorHandler {
 
 	@ExceptionHandler(ValidationException.class)
 	public ResponseEntity<String> handleBusinessValidations(Exception e) {
+		return ResponseEntity.badRequest().body(e.getMessage());
+	}
+	
+	@ExceptionHandler(ValidationError.class)
+	public ResponseEntity<String> handleValidationsErrors(Exception e) {
 		return ResponseEntity.badRequest().body(e.getMessage());
 	}
 

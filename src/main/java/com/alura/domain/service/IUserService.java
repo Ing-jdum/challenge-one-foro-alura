@@ -1,6 +1,6 @@
 package com.alura.domain.service;
 
-import com.alura.data.remote.dto.UserDto;
+import com.alura.data.remote.dto.user.UserDto;
 
 public interface IUserService {
 

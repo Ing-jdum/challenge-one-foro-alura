@@ -3,7 +3,7 @@ package com.alura.data.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.alura.data.remote.dto.UserDto;
+import com.alura.data.remote.dto.user.UserDto;
 import com.alura.data.repository.UserRepository;
 import com.alura.domain.model.User;
 import com.alura.domain.service.IUserService;

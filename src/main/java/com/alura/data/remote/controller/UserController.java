@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alura.data.remote.dto.UserDto;
+import com.alura.data.remote.dto.user.UserDto;
 import com.alura.data.repository.UserRepository;
 import com.alura.domain.service.IUserService;
 
