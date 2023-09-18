@@ -1,6 +1,6 @@
 package com.alura.domain.service;
 
-import com.alura.data.remote.dto.ResponseDto;
+import com.alura.data.remote.dto.response.ResponseDto;
 
 public interface IResponseService {
 

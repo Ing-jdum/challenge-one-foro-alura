@@ -31,7 +31,7 @@ public class UserService implements IUserService {
 			throw new ValidationError(ErrorMessages.EMAIL_EXISTS.getMessage());
 		}
 
-		User user = data.toUser();
+		User user = new User(data);
 		userRepository.save(user);
 		return new UserDto(user);
 	}

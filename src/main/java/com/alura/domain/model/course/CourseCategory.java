@@ -10,7 +10,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Table(name = "courses_category")
+@Table(name = "course_category")
 @Entity(name = "CourseCategory")
 @Getter
 @NoArgsConstructor
@@ -21,9 +21,27 @@ public class CourseCategory {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@SuppressWarnings("unused")
 	private String category;
-	@SuppressWarnings("unused")
 	private String description;
+
+	public Long getId() {
+		return id;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
 }

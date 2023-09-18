@@ -17,9 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.alura.data.remote.dto.topic.TopicDto;
-import com.alura.data.repository.TopicRepository;
-import com.alura.domain.service.ITopicService;
+import com.alura.data.remote.dto.course.CourseDto;
+import com.alura.data.remote.dto.response.ResponseDto;
+import com.alura.data.repository.CourseRepository;
+import com.alura.domain.service.ICourseService;
 import com.alura.infra.error.ErrorMessages;
 import com.alura.infra.error.validations.ValidationError;
 
@@ -28,49 +29,49 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/topics")
+@RequestMapping("/course")
 @SecurityRequirement(name = "bearer-key")
-public class TopicController {
+public class CourseController {
 
-	ITopicService topicService;
-	TopicRepository topicRepository;
+	private final CourseRepository courseRepository;
+	private final ICourseService courseService;
 
 	@Autowired
-	public TopicController(ITopicService topicService, TopicRepository topicRepository) {
-		this.topicService = topicService;
-		this.topicRepository = topicRepository;
+	public CourseController(CourseRepository courseRepository, ICourseService courseService) {
+		this.courseRepository = courseRepository;
+		this.courseService = courseService;
 	}
 
 	@PostMapping
-	public ResponseEntity<TopicDto> create(@RequestBody @Valid TopicDto data,
+	public ResponseEntity<CourseDto> create(@RequestBody @Valid CourseDto data,
 			UriComponentsBuilder uriComponentsBuilder) {
-		TopicDto topic = topicService.create(data);
-		URI url = uriComponentsBuilder.path("/topic/{id}").buildAndExpand(topic.id()).toUri();
-		return ResponseEntity.created(url).body(topic);
+		CourseDto courseDto = courseService.create(data);
+		URI url = uriComponentsBuilder.path("/course/{id}").buildAndExpand(data.id()).toUri();
+		return ResponseEntity.created(url).body(courseDto);
 	}
 
 	@GetMapping("/all")
-	public ResponseEntity<Page<TopicDto>> getAll(@PageableDefault(size = 2) Pageable pagination) {
-		return ResponseEntity.ok(topicRepository.findAll(pagination).map(TopicDto::new));
+	public ResponseEntity<Page<CourseDto>> getAll(@PageableDefault(size = 2) Pageable pagination) {
+		return ResponseEntity.ok(courseRepository.findAll(pagination).map(CourseDto::new));
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<TopicDto> getById(@PathVariable Long id) {
-		return ResponseEntity.ok(topicService.findById(id));
+	public ResponseEntity<CourseDto> getById(@PathVariable Long id) {
+		return ResponseEntity.ok(courseService.findById(id));
 	}
 
 	@PutMapping("/{id}")
 	@Transactional
-	public ResponseEntity<TopicDto> updateById(@PathVariable Long id, @RequestBody TopicDto data) {
-		return ResponseEntity.ok(topicService.updateTopic(id, data));
+	public ResponseEntity<CourseDto> updateById(@PathVariable Long id, @RequestBody CourseDto data) {
+		return ResponseEntity.ok(courseService.updateService(id, data));
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deleteById(@PathVariable Long id) {
-		if (topicService.findById(id) == null) {
-			throw new ValidationError(ErrorMessages.TOPIC_NOT_FOUND.getMessage());
+		if (courseService.findById(id) == null) {
+			throw new ValidationError(ErrorMessages.COURSE_NOT_FOUND.getMessage());
 		}
-		topicRepository.deleteById(id);
+		courseRepository.deleteById(id);
 		return ResponseEntity.noContent().build();
 	}
 }

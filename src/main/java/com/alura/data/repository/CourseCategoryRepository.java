@@ -4,9 +4,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.alura.domain.model.course.Course;
+import com.alura.domain.model.course.CourseCategory;
 
 @Repository
-public interface CourseRepository extends JpaRepository<Course, Long> {
-	
-	public Boolean existsByName(String name);
+public interface CourseCategoryRepository extends JpaRepository<CourseCategory, Long> {
+
 }

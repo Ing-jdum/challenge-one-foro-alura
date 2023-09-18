@@ -1,6 +1,6 @@
 package com.alura.domain.service;
 
-import com.alura.data.remote.dto.TopicDto;
+import com.alura.data.remote.dto.topic.TopicDto;
 
 public interface ITopicService {
 

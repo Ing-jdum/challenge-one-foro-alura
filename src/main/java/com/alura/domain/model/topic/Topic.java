@@ -4,11 +4,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.alura.data.remote.dto.TopicDto;
+import com.alura.data.remote.dto.topic.TopicDto;
 import com.alura.domain.model.Response;
 import com.alura.domain.model.User;
 import com.alura.domain.model.course.Course;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -44,7 +45,7 @@ public class Topic {
 	@JoinColumn(name = "course_id")
 	private Course course;
 
-	@OneToMany(mappedBy = "topic")
+	@OneToMany(mappedBy = "topic", cascade = CascadeType.REMOVE)
 	private List<Response> responses = new ArrayList<>();
 
 	public Topic() {

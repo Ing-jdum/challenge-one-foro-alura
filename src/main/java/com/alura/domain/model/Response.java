@@ -2,7 +2,7 @@ package com.alura.domain.model;
 
 import java.time.LocalDateTime;
 
-import com.alura.data.remote.dto.ResponseDto;
+import com.alura.data.remote.dto.response.ResponseDto;
 import com.alura.domain.model.topic.Topic;
 
 import jakarta.persistence.Entity;
@@ -35,6 +35,9 @@ public class Response {
 	private User author;
 
 	private Boolean solution = false;
+
+	public Response() {
+	}
 
 	public Response(ResponseDto responseDto, Topic topic, User user) {
 		this.message = responseDto.message();
@@ -118,24 +121,24 @@ public class Response {
 	}
 
 	public void update(ResponseDto data, Topic topic, User user) {
-		if(data.message() != null) {
+		if (data.message() != null) {
 			this.message = data.message();
 		}
-		if(data.topicId() != null) {
+		if (data.topicId() != null) {
 			this.topic = topic;
 		}
-		if(data.creationDate() != null) {
+		if (data.creationDate() != null) {
 			this.creationDate = data.creationDate();
 		}
-		if(data.userId() != null) {
+		if (data.userId() != null) {
 			this.author = user;
 		}
-		if(data.message() != null) {
+		if (data.message() != null) {
 			this.message = data.message();
 		}
-		if(data.solution() != null) {
+		if (data.solution() != null) {
 			this.solution = data.solution();
 		}
-		
+
 	}
 }

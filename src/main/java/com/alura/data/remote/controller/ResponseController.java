@@ -17,15 +17,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.alura.data.remote.dto.ResponseDto;
+import com.alura.data.remote.dto.response.ResponseDto;
 import com.alura.data.repository.ResponseRepository;
 import com.alura.domain.service.IResponseService;
+import com.alura.infra.error.ErrorMessages;
+import com.alura.infra.error.validations.ValidationError;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/responses")
+@SecurityRequirement(name = "bearer-key")
 public class ResponseController {
 
 	IResponseService responseService;
@@ -63,6 +67,9 @@ public class ResponseController {
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deleteById(@PathVariable Long id) {
+		if (responseService.findById(id) == null) {
+			throw new ValidationError(ErrorMessages.RESPONSE_NOT_FOUND.getMessage());
+		}
 		responseRepository.deleteById(id);
 		return ResponseEntity.noContent().build();
 	}

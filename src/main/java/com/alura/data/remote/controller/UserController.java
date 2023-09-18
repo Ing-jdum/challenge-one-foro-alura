@@ -20,12 +20,16 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.alura.data.remote.dto.user.UserDto;
 import com.alura.data.repository.UserRepository;
 import com.alura.domain.service.IUserService;
+import com.alura.infra.error.ErrorMessages;
+import com.alura.infra.error.validations.ValidationError;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/user")
+@SecurityRequirement(name = "bearer-key")
 public class UserController {
 
 	private UserRepository userRepository;
@@ -40,7 +44,7 @@ public class UserController {
 	@PostMapping
 	public ResponseEntity<UserDto> create(@RequestBody @Valid UserDto data, UriComponentsBuilder uriComponentsBuilder) {
 		UserDto user = userService.create(data);
-		URI url = uriComponentsBuilder.path("/user/{id}").buildAndExpand(data.id()).toUri();
+		URI url = uriComponentsBuilder.path("/user/{id}").buildAndExpand(user.id()).toUri();
 		return ResponseEntity.created(url).body(user);
 	}
 
@@ -62,6 +66,9 @@ public class UserController {
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deleteById(@PathVariable Long id) {
+		if (userService.findById(id) == null) {
+			throw new ValidationError(ErrorMessages.USER_NOT_FOUND.getMessage());
+		}
 		userRepository.deleteById(id);
 		return ResponseEntity.noContent().build();
 	}

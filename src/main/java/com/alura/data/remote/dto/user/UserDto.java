@@ -10,8 +10,4 @@ public record UserDto(Long id, @NotNull String name, @NotNull @Email String emai
 	public UserDto(User user) {
 		this(user.getId(), user.getName(), user.getEmail(), user.getPassword());
 	}
-
-	public User toUser() {
-		return new User(this);
-	}
 }

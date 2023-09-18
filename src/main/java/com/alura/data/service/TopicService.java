@@ -3,7 +3,7 @@ package com.alura.data.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.alura.data.remote.dto.TopicDto;
+import com.alura.data.remote.dto.topic.TopicDto;
 import com.alura.data.repository.CourseRepository;
 import com.alura.data.repository.TopicRepository;
 import com.alura.data.repository.UserRepository;
@@ -31,13 +31,13 @@ public class TopicService implements ITopicService {
 
 	@Override
 	public TopicDto create(TopicDto data) {
+		validateTopicExists(data);
 		User user = getUser(data);
 		Course course = getCourse(data);
-		validateTopicExists(data);
 
 		Topic topic = data.toTopic(user, course);
 		topicRepository.save(topic);
-		return(new TopicDto(topic));
+		return (new TopicDto(topic));
 	}
 
 	private void validateTopicExists(TopicDto data) {
@@ -48,15 +48,15 @@ public class TopicService implements ITopicService {
 
 	@Override
 	public TopicDto updateTopic(Long id, TopicDto data) {
-		User user = getUser(data);
-		Course course = getCourse(data);
-
+		validateTopicExists(data);
 		Topic topic = topicRepository.findById(id)
 				.orElseThrow(() -> new ValidationError(ErrorMessages.TOPIC_NOT_FOUND.getMessage()));
+		
+		TopicDto existingTopic = new TopicDto(topic);
+		User user = getUser(data);
+		Course course = getCourse(data);
 		topic.updateData(data, course, user);
-		TopicDto newTopic = new TopicDto(topic);
-		validateTopicExists(newTopic);
-		return newTopic;
+		return new TopicDto(topic);
 	}
 
 	private Course getCourse(TopicDto data) {

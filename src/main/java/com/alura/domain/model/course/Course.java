@@ -1,5 +1,7 @@
 package com.alura.domain.model.course;
 
+import com.alura.data.remote.dto.course.CourseDto;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -12,24 +14,25 @@ import jakarta.persistence.Table;
 @Table(name = "courses")
 @Entity(name = "Course")
 public class Course {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	private String name;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "course_category_id")
-	private CourseCategory categoria;
-	
-	public Course() {}
-	
-	public Course(String name, CourseCategory categoria) {
-		this.name = name;
-		this.categoria = categoria;
+	private CourseCategory category;
+
+	public Course() {
 	}
-	
+
+	public Course(CourseDto data, CourseCategory category) {
+		this.name = data.name();
+		this.category = category;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -71,12 +74,22 @@ public class Course {
 		this.name = name;
 	}
 
-	public CourseCategory getCategoria() {
-		return categoria;
+	public CourseCategory getCategory() {
+		return category;
 	}
 
-	public void setCategoria(CourseCategory categoria) {
-		this.categoria = categoria;
+	public void setCategory(CourseCategory category) {
+		this.category = category;
+	}
+
+	public void updateData(CourseDto data, CourseCategory category) {
+		if (data.name() != null) {
+			this.name = data.name();
+		}
+		if (category != null) {
+			this.category = category;
+		}
+
 	}
 
 }

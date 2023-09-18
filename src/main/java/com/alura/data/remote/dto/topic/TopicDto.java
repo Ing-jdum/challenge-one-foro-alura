@@ -1,4 +1,4 @@
-package com.alura.data.remote.dto;
+package com.alura.data.remote.dto.topic;
 
 import java.util.List;
 

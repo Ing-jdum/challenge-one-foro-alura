@@ -3,7 +3,7 @@ package com.alura.data.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.alura.data.remote.dto.ResponseDto;
+import com.alura.data.remote.dto.response.ResponseDto;
 import com.alura.data.repository.ResponseRepository;
 import com.alura.data.repository.TopicRepository;
 import com.alura.data.repository.UserRepository;
@@ -54,14 +54,13 @@ public class ResponseService implements IResponseService {
 
 	@Override
 	public ResponseDto updateService(Long id, ResponseDto data) {
+		validateResponseExists(data);
 		Response response = responseRepository.findById(id)
 				.orElseThrow(() -> new ValidationError(ErrorMessages.RESPONSE_NOT_FOUND.getMessage()));
 		Topic topic = getTopic(data);
 		User user = getUser(data);
 		response.update(data, topic, user);
-		ResponseDto newResponse = new ResponseDto(response); 
-		validateResponseExists(newResponse);
-		return newResponse;
+		return new ResponseDto(response);
 	}
 	
 	private User getUser(ResponseDto data) {
