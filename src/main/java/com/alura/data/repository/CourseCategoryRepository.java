@@ -9,4 +9,6 @@ import com.alura.domain.model.course.CourseCategory;
 @Repository
 public interface CourseCategoryRepository extends JpaRepository<CourseCategory, Long> {
 
+	Object existsByCategory(String category);
+
 }

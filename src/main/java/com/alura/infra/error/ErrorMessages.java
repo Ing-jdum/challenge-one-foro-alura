@@ -9,7 +9,8 @@ public enum ErrorMessages {
 	KEY_PARSE_ERROR("Could not parse .pem files"), NULL_TOKEN("Token is null"),
 	COULD_NOT_VERIFY_TOKEN("The given token could not be verified"),
 	CATEGORY_NOT_EXIST("Specified category do not exists"), CATEGORY_NOT_FOUND("Category not found"),
-	COURSE_ALREADY_EXISTS("Course already exists");
+	COURSE_ALREADY_EXISTS("Course already exists"),
+	CATEGORY_ALREADY_EXISTS("Category already exists");
 	// Add more error messages here as needed
 
 	private final String message;

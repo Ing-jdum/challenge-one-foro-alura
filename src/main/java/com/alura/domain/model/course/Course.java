@@ -1,7 +1,11 @@
 package com.alura.domain.model.course;
 
-import com.alura.data.remote.dto.course.CourseDto;
+import java.util.List;
 
+import com.alura.data.remote.dto.course.CourseDto;
+import com.alura.domain.model.topic.Topic;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -9,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Table(name = "courses")
@@ -21,9 +26,12 @@ public class Course {
 
 	private String name;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	@JoinColumn(name = "course_category_id")
 	private CourseCategory category;
+	
+	@OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE)
+	List<Topic> topics;
 
 	public Course() {
 	}
