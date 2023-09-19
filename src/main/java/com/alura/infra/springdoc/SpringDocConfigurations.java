@@ -18,7 +18,7 @@ public class SpringDocConfigurations {
 				.components(new Components().addSecuritySchemes("bearer-key",
 						new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")))
 				.info(new Info().title("API Voll.med").description(
-						"REST API for a sample forum app, it contains the CRUD for creating users, topics, responses, courses and courses categories.")
+						"REST API for a sample forum app, it contains the CRUD for users, topics, responses, courses and courses categories.")
 						.contact(new Contact().name("Equipo Backend").email("ing.jdum@gmail.com")));
 	}
 
