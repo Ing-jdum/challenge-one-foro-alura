@@ -23,6 +23,7 @@ import com.alura.domain.service.IUserService;
 import com.alura.infra.error.ErrorMessages;
 import com.alura.infra.error.validations.ValidationError;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -42,6 +43,7 @@ public class UserController {
 	}
 
 	@PostMapping
+	@Operation(summary = "Create a new topic")
 	public ResponseEntity<UserDto> create(@RequestBody @Valid UserDto data, UriComponentsBuilder uriComponentsBuilder) {
 		UserDto user = userService.create(data);
 		URI url = uriComponentsBuilder.path("/user/{id}").buildAndExpand(user.id()).toUri();
@@ -49,22 +51,26 @@ public class UserController {
 	}
 
 	@GetMapping("/all")
+	@Operation(summary = "Get a paginated list of all topics")
 	public ResponseEntity<Page<UserDto>> getAll(@PageableDefault(size = 2) Pageable pagination) {
 		return ResponseEntity.ok(userRepository.findAll(pagination).map(UserDto::new));
 	}
 
 	@GetMapping("/{id}")
+	@Operation(summary = "Get a topic by its ID")
 	public ResponseEntity<UserDto> getById(@PathVariable Long id) {
 		return ResponseEntity.ok(userService.findById(id));
 	}
 
 	@PutMapping("/{id}")
+	@Operation(summary = "Update a topic by its ID")
 	@Transactional
 	public ResponseEntity<UserDto> updateById(@PathVariable Long id, @RequestBody UserDto data) {
 		return ResponseEntity.ok(userService.updateService(id, data));
 	}
 
 	@DeleteMapping("/{id}")
+	@Operation(summary = "Delete a topic by its ID")
 	public ResponseEntity<String> deleteById(@PathVariable Long id) {
 		if (userService.findById(id) == null) {
 			throw new ValidationError(ErrorMessages.USER_NOT_FOUND.getMessage());

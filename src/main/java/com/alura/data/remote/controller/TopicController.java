@@ -23,6 +23,7 @@ import com.alura.domain.service.ITopicService;
 import com.alura.infra.error.ErrorMessages;
 import com.alura.infra.error.validations.ValidationError;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -42,6 +43,7 @@ public class TopicController {
 	}
 
 	@PostMapping
+	@Operation(summary = "Create a new topic")
 	public ResponseEntity<TopicDto> create(@RequestBody @Valid TopicDto data,
 			UriComponentsBuilder uriComponentsBuilder) {
 		TopicDto topic = topicService.create(data);
@@ -50,22 +52,26 @@ public class TopicController {
 	}
 
 	@GetMapping("/all")
+	@Operation(summary = "Get a paginated list of all topics")
 	public ResponseEntity<Page<TopicDto>> getAll(@PageableDefault(size = 2) Pageable pagination) {
 		return ResponseEntity.ok(topicRepository.findAll(pagination).map(TopicDto::new));
 	}
 
 	@GetMapping("/{id}")
+	@Operation(summary = "Get a topic by its ID")
 	public ResponseEntity<TopicDto> getById(@PathVariable Long id) {
 		return ResponseEntity.ok(topicService.findById(id));
 	}
 
 	@PutMapping("/{id}")
+	@Operation(summary = "Update a topic by its ID")
 	@Transactional
 	public ResponseEntity<TopicDto> updateById(@PathVariable Long id, @RequestBody TopicDto data) {
 		return ResponseEntity.ok(topicService.updateTopic(id, data));
 	}
 
 	@DeleteMapping("/{id}")
+	@Operation(summary = "Delete a topic by its ID")
 	public ResponseEntity<String> deleteById(@PathVariable Long id) {
 		if (topicService.findById(id) == null) {
 			throw new ValidationError(ErrorMessages.TOPIC_NOT_FOUND.getMessage());

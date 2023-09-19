@@ -15,6 +15,7 @@ import com.alura.domain.model.User;
 import com.alura.infra.security.remote.TokenService;
 import com.alura.infra.security.remote.dto.JWTTokenDto;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 
 @RestController
@@ -32,6 +33,7 @@ public class AuthenticationController {
 	}
 
 	@PostMapping
+    @Operation(summary = "Authenticate an user with it's username and password and returns a jwtToken header")
 	public ResponseEntity<JWTTokenDto> autenticarUsuario(@RequestBody @Valid UserAuthDto userAuthDto) {
 		Authentication token = new UsernamePasswordAuthenticationToken(userAuthDto.name(), userAuthDto.password());
 		var authenticatedUser = authenticationManager.authenticate(token);

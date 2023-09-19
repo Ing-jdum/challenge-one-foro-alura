@@ -23,6 +23,7 @@ import com.alura.domain.service.IResponseService;
 import com.alura.infra.error.ErrorMessages;
 import com.alura.infra.error.validations.ValidationError;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -42,6 +43,7 @@ public class ResponseController {
 	}
 
 	@PostMapping
+	@Operation(summary = "Create a new response")
 	public ResponseEntity<ResponseDto> create(@RequestBody @Valid ResponseDto data,
 			UriComponentsBuilder uriComponentsBuilder) {
 		ResponseDto responseDto = responseService.create(data);
@@ -50,22 +52,26 @@ public class ResponseController {
 	}
 
 	@GetMapping("/all")
+	@Operation(summary = "Get a paginated list of all responses")
 	public ResponseEntity<Page<ResponseDto>> getAll(@PageableDefault(size = 2) Pageable pagination) {
 		return ResponseEntity.ok(responseRepository.findAll(pagination).map(ResponseDto::new));
 	}
 
 	@GetMapping("/{id}")
+	@Operation(summary = "Get a response by its ID")
 	public ResponseEntity<ResponseDto> getById(@PathVariable Long id) {
 		return ResponseEntity.ok(responseService.findById(id));
 	}
 
 	@PutMapping("/{id}")
+	@Operation(summary = "Update a response by its ID")
 	@Transactional
 	public ResponseEntity<ResponseDto> updateById(@PathVariable Long id, @RequestBody ResponseDto data) {
 		return ResponseEntity.ok(responseService.updateService(id, data));
 	}
 
 	@DeleteMapping("/{id}")
+	@Operation(summary = "Delete a response by its ID")
 	public ResponseEntity<String> deleteById(@PathVariable Long id) {
 		if (responseService.findById(id) == null) {
 			throw new ValidationError(ErrorMessages.RESPONSE_NOT_FOUND.getMessage());
